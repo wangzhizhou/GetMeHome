@@ -15,7 +15,7 @@ import java.util.UUID;
  *
  * @author SimonOrJ
  */
-@SuppressWarnings("unused")
+
 public interface HomeStorageAPI {
     default HomeStorageAPI getAPI() {
         GetMeHome p = GetMeHome.getInstance();
@@ -32,6 +32,7 @@ public interface HomeStorageAPI {
 
     /**
      * Gets UUID from player name
+     *
      * @param player exact name of player to look up
      * @return UUID of player
      */
@@ -48,6 +49,7 @@ public interface HomeStorageAPI {
 
     /**
      * Gets name of the default home.
+     *
      * @param player Player to find home of
      * @return home name. null if no (default) home is set.
      */
@@ -55,8 +57,9 @@ public interface HomeStorageAPI {
 
     /**
      * Sets a different home as a default home
+     *
      * @param player Player name
-     * @param name Home name
+     * @param name   Home name
      * @return if name of home exists
      */
     boolean setDefaultHome(UUID player, String name);

@@ -8,7 +8,6 @@ import com.simonorj.mc.getmehome.config.ConfigUpgrader;
 import com.simonorj.mc.getmehome.config.YamlPermValue;
 import com.simonorj.mc.getmehome.storage.HomeStorageAPI;
 import com.simonorj.mc.getmehome.storage.StorageYAML;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,15 +33,37 @@ public final class GetMeHome extends JavaPlugin {
     private int welcomeHomeRadiusSquared;
     private File i18nFolder;
 
-    public static GetMeHome getInstance() { return instance; }
-    public int getWelcomeHomeRadiusSquared() { return welcomeHomeRadiusSquared; }
-    public YamlPermValue getLimit() { return limit; }
-    public YamlPermValue getWarmup() { return warmup; }
-    public YamlPermValue getCooldown() { return cooldown; }
-    public ChatColor getFocusColor() { return focusColor; }
-    public ChatColor getContentColor() { return contentColor; }
+    public static GetMeHome getInstance() {
+        return instance;
+    }
 
-    String getPrefix() { return prefix; }
+    public int getWelcomeHomeRadiusSquared() {
+        return welcomeHomeRadiusSquared;
+    }
+
+    public YamlPermValue getLimit() {
+        return limit;
+    }
+
+    public YamlPermValue getWarmup() {
+        return warmup;
+    }
+
+    public YamlPermValue getCooldown() {
+        return cooldown;
+    }
+
+    public ChatColor getFocusColor() {
+        return focusColor;
+    }
+
+    public ChatColor getContentColor() {
+        return contentColor;
+    }
+
+    String getPrefix() {
+        return prefix;
+    }
 
     @Override
     public void onEnable() {
@@ -80,33 +101,34 @@ public final class GetMeHome extends JavaPlugin {
     }
 
     private void setupMetrics() {
-        try {
-            Class.forName("com.google.gson.JsonElement");
-        } catch (ClassNotFoundException e) {
-            getLogger().info("Metrics cannot be loaded. You will want to update to MC 1.8+.");
-            return;
-        }
-        Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("prefixBranding", () -> {
-            String pre = getConfig().getString(ConfigTool.MESSAGE_PREFIX_NODE, "&6[GetMeHome]");
-            if (pre.isEmpty())
-                return "Empty";
-            if (pre.equals("&6[GetMeHome]"))
-                return "Unchanged";
-            if (pre.toLowerCase().contains("getmehome"))
-                return "Modified";
-            return "Removed";
-        }));
-        metrics.addCustomChart(new Metrics.SingleLineChart("totalHomes", getStorage()::totalHomes));
-        metrics.addCustomChart(new Metrics.SimplePie("customMessages", () -> {
-            if (i18nFolder.isDirectory()) {
-                String[] files = i18nFolder.list();
-                if (files != null && files.length > 0) {
-                    return "true";
-                }
-            }
-            return "false";
-        }));
+// TODO：switch to paper metrics
+//        try {
+//            Class.forName("com.google.gson.JsonElement");
+//        } catch (ClassNotFoundException e) {
+//            getLogger().info("Metrics cannot be loaded. You will want to update to MC 1.8+.");
+//            return;
+//        }
+//        Metrics metrics = new Metrics(this);
+//        metrics.addCustomChart(new Metrics.SimplePie("prefixBranding", () -> {
+//            String pre = getConfig().getString(ConfigTool.MESSAGE_PREFIX_NODE, "&6[GetMeHome]");
+//            if (pre.isEmpty())
+//                return "Empty";
+//            if (pre.equals("&6[GetMeHome]"))
+//                return "Unchanged";
+//            if (pre.toLowerCase().contains("getmehome"))
+//                return "Modified";
+//            return "Removed";
+//        }));
+//        metrics.addCustomChart(new Metrics.SingleLineChart("totalHomes", getStorage()::totalHomes));
+//        metrics.addCustomChart(new Metrics.SimplePie("customMessages", () -> {
+//            if (i18nFolder.isDirectory()) {
+//                String[] files = i18nFolder.list();
+//                if (files != null && files.length > 0) {
+//                    return "true";
+//                }
+//            }
+//            return "false";
+//        }));
     }
 
     @Override
@@ -169,7 +191,6 @@ public final class GetMeHome extends JavaPlugin {
         return storage;
     }
 
-    @SuppressWarnings("deprecation")
     public OfflinePlayer getPlayer(String name) {
         UUID uuid = getStorage().getUniqueID(name);
         if (uuid != null)

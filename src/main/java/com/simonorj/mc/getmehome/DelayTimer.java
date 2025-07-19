@@ -56,7 +56,7 @@ public class DelayTimer {
 
 
     private class CooldownTimer extends BukkitRunnable {
-        Player player;
+        final Player player;
         int counter;
 
         private CooldownTimer(Player p, int counter) {
@@ -76,11 +76,10 @@ public class DelayTimer {
     private class WarmupTimer extends BukkitRunnable {
         private final Player sender;
         private final boolean checkMovement;
-
+        private final Runnable onTime;
+        private final Runnable onCancel;
         private int counter;
         private Location polledLocation;
-        private Runnable onTime;
-        private Runnable onCancel;
 
         private WarmupTimer(Player sender, int counter, boolean checkMovement, Runnable onTime, Runnable onCancel) {
             this.sender = sender;

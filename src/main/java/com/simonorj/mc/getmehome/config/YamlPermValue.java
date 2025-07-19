@@ -16,7 +16,7 @@ public class YamlPermValue {
     }
 
     private int noNeg(int n) {
-        return n < 0 ? 0 : n;
+        return Math.max(n, 0);
     }
 
     public WorldValue calcFor(Player p) {
@@ -61,10 +61,10 @@ public class YamlPermValue {
         return new WorldValue(null, noNeg(ret + defaultValue), deducts);
     }
 
-    public class WorldValue {
+    public static class WorldValue {
         public final List<String> worlds;
-        public int value;
         public final List<WorldValue> deducts;
+        public int value;
 
         private WorldValue(List<String> worlds, int value) {
             this(worlds, value, null);

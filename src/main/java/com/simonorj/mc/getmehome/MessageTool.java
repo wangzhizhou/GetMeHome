@@ -5,9 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -17,6 +14,7 @@ import java.util.ResourceBundle;
 
 public class MessageTool {
     private static ClassLoader loader = null;
+
     private static String base(I18n i18n, Locale locale, Object... args) {
         String msg = getBundleString(i18n, locale);
 
@@ -27,7 +25,8 @@ public class MessageTool {
         if (loader != null) {
             try {
                 return ResourceBundle.getBundle("GetMeHome", locale, loader).getString(i18n.toString());
-            } catch (NullPointerException | MissingResourceException ignore) {}
+            } catch (NullPointerException | MissingResourceException ignore) {
+            }
         }
 
         return ResourceBundle.getBundle("i18n.GetMeHome", locale).getString(i18n.toString());
@@ -78,40 +77,8 @@ public class MessageTool {
     }
 
     private static Locale getLocale(CommandSender sender) {
-        if (!(sender instanceof Player))
+        if (!(sender instanceof Player p))
             return Locale.getDefault();
-
-        Player p = (Player) sender;
-
-        Method method = null;
-        for (Method m : p.getClass().getDeclaredMethods()) {
-            if (m.getName().equals("getHandle"))
-                method = m;
-        }
-        if (method == null) {
-            return Locale.getDefault();
-        }
-
-        String locale;
-
-        try {
-            Object ep = method.invoke(p, (Object[]) null);
-            Field f = ep.getClass().getDeclaredField("locale");
-            f.setAccessible(true);
-            locale = (String) f.get(ep);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
-            e.printStackTrace();
-            return Locale.getDefault();
-        }
-
-        String[] l = locale.split("_", 3);
-
-        if (l.length == 1)
-            return new Locale(l[0]);
-
-        if (l.length == 2)
-            return new Locale(l[0],l[1]);
-
-        return new Locale(l[0],l[1],l[2]);
+        return p.locale();
     }
 }

@@ -41,16 +41,16 @@ public class StorageYAML implements HomeStorageAPI {
      *       - PITCH
      */
 
-    private String cleanName(String s) {
-        return s.replaceAll("\\.", "-");
-    }
-
     public StorageYAML() {
         if (!homeFile.exists()) {
             plugin.saveResource("homes.yml", false);
         }
 
         clearCache();
+    }
+
+    private String cleanName(String s) {
+        return s.replaceAll("\\.", "-");
     }
 
     @Override
@@ -108,7 +108,7 @@ public class StorageYAML implements HomeStorageAPI {
 
         if (storage.getConfigurationSection(uuid.toString() + ".h." + name) == null)
             return false;
-        storage.set(uuid.toString() + ".d", name);
+        storage.set(uuid + ".d", name);
         return true;
     }
 

@@ -35,7 +35,7 @@ public class ConfigUpgrader {
         limitc.set(LIMIT_ROOT, null);
 
         // Make sure to set header comments
-        limitc.options().copyHeader(true);
+        limitc.options().parseComments(true);
 
         // Using traditional method keeps breaking up the permission node-style periods.
         // So I had to build this kind of monstery ;-;
@@ -45,16 +45,17 @@ public class ConfigUpgrader {
             data.append("\nlimit:\n");
 
             ConfigurationSection cs = pl.getConfig().getConfigurationSection(LIMIT_ROOT);
+            if (cs != null) {
+                for (String key : cs.getKeys(true)) {
+                    if (!cs.isInt(key) || key.equals(DEFAULT))
+                        continue;
 
-            for (String key : cs.getKeys(true)) {
-                if (!cs.isInt(key) || key.equals(DEFAULT))
-                    continue;
-
-                data.append("- perm: ")
-                        .append(key)
-                        .append("\n  value: ")
-                        .append(cs.getInt(key))
-                        .append('\n');
+                    data.append("- perm: ")
+                            .append(key)
+                            .append("\n  value: ")
+                            .append(cs.getInt(key))
+                            .append('\n');
+                }
             }
 
             try (Writer writer = new OutputStreamWriter(new FileOutputStream(limitf), Charsets.UTF_8)) {
