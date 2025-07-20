@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,7 +22,7 @@ public class ListHomesCommand implements TabExecutor {
     private static final String OTHER_PERM = "getmehome.command.listhomes.other";
     private static final String GLOBAL_FLAG = "-global";
     private static final String GLOBAL_SHORT_FLAG = "-g";
-    private GetMeHome plugin;
+    private final GetMeHome plugin;
 
     public ListHomesCommand(GetMeHome plugin) {
         this.plugin = plugin;
@@ -32,7 +33,7 @@ public class ListHomesCommand implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(final CommandSender sender, Command cmd, String label, final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, final String[] args) {
         // Get player in question
         OfflinePlayer get;
         boolean global;
@@ -69,7 +70,7 @@ public class ListHomesCommand implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (args.length == 1) {
             List<String> ret = new ArrayList<>();
             String lower = args[0].toLowerCase();
@@ -82,8 +83,7 @@ public class ListHomesCommand implements TabExecutor {
                 });
             }
 
-            if (GLOBAL_FLAG.startsWith(lower))
-                ret.add(GLOBAL_FLAG);
+            if (GLOBAL_FLAG.startsWith(lower)) ret.add(GLOBAL_FLAG);
 
             return ret;
         } else if (args.length == 2 && sender.hasPermission(OTHER_PERM) && args[0].equalsIgnoreCase(GLOBAL_FLAG)) {
@@ -138,8 +138,7 @@ public class ListHomesCommand implements TabExecutor {
                     deductable = true;
 
                     if (wvd.value != 0) {
-                        if (wvd.value != -1)
-                            wvd.value--;
+                        if (wvd.value != -1) wvd.value--;
                         exempt.incrementAndGet();
                         break;
                     }
@@ -148,10 +147,8 @@ public class ListHomesCommand implements TabExecutor {
         }
 
         StringBuilder ret = new StringBuilder();
-        if (d.getKey().equals(defaultHome))
-            ret.append(ChatColor.BOLD);
-        if (deductable)
-            ret.append(ChatColor.ITALIC);
+        if (d.getKey().equals(defaultHome)) ret.append(ChatColor.BOLD);
+        if (deductable) ret.append(ChatColor.ITALIC);
         ret.append(d.getKey()).append(ChatColor.RESET);
         return ret.toString();
     }

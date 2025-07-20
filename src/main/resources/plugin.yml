@@ -1,10 +1,11 @@
 name: GetMeHome
-version: ${project.version}
+version: 3.0.0
 author: Simon Chuu
+contributors: [wangzhizhou]
 description: Simple home plugin that just gets you home
 main: com.simonorj.mc.getmehome.GetMeHome
 website: http://github.com/SimonOrJ/GetMeHome
-api-version: 1.13
+api-version: 1.21.7
 
 commands:
   getmehome:
@@ -15,12 +16,12 @@ commands:
     usage: /delhome [home name]
     permission: getmehome.command.delhome
   home:
-    aliases: [h]
+    aliases: [ h ]
     description: Sends you home
     usage: /home [home name]
     permission: getmehome.command.home
   listhomes:
-    aliases: [homes]
+    aliases: [ homes ]
     description: Lists all the homes
     usage: /listhomes
     permission: getmehome.command.listhomes
@@ -34,6 +35,11 @@ commands:
     permission: getmehome.command.setdefaulthome
 
 permissions:
+  # bStats
+  bstats:
+    default: true
+    description: Allows bStats to collect plugin metrics
+
   # Reload
   getmehome.reload:
     description: Allows /getmehome reload

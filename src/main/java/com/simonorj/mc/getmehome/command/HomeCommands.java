@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -39,7 +40,7 @@ public class HomeCommands implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, final Command cmd, String label, final String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, final @NotNull Command cmd, @NotNull String label, final String[] args) {
         OfflinePlayer target;
         boolean otherHome;
 
@@ -90,7 +91,7 @@ public class HomeCommands implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (args.length == 1) {
             List<String> ret = new ArrayList<>();
             if (sender instanceof Player) {
@@ -175,7 +176,7 @@ public class HomeCommands implements TabExecutor {
                     allowMove
                             ? I18n.CMD_HOME_WARMUP
                             : I18n.CMD_HOME_WARMUP_STILL
-                    , sender, delay/20.0));
+                    , sender, delay / 20.0));
 
             delayTimer.newWarmup(sender, delay, !allowMove,
                     () -> teleportHome(sender, target, home, loc),
@@ -184,7 +185,7 @@ public class HomeCommands implements TabExecutor {
         } else {
             teleportHome(sender, target, home, loc);
         }
-   }
+    }
 
     private boolean isCoolingDown(Player sender, boolean isOwner) {
         int coolTick = delayTimer.getCooldown(sender);
