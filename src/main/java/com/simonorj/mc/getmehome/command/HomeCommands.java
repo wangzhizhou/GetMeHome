@@ -5,6 +5,7 @@ import com.simonorj.mc.getmehome.GetMeHome;
 import com.simonorj.mc.getmehome.I18n;
 import com.simonorj.mc.getmehome.config.YamlPermValue;
 import com.simonorj.mc.getmehome.storage.HomeStorageAPI;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -319,14 +320,14 @@ public class HomeCommands implements TabExecutor {
             sender.sendMessage(error(I18n.CMD_GENERIC_HOME_FAILURE, sender, home));
     }
 
-    private String preparedMessage(I18n i18n, CommandSender sender, OfflinePlayer target, String home) {
+    private TextComponent preparedMessage(I18n i18n, CommandSender sender, OfflinePlayer target, String home) {
         if (sender == target)
             return prefixed(i18n, sender, home);
         else
             return prefixed(i18n, sender, target.getName(), home);
     }
 
-    private String genericHomeFailureMessage(CommandSender sender, OfflinePlayer target, String home) {
+    private TextComponent genericHomeFailureMessage(CommandSender sender, OfflinePlayer target, String home) {
         if (sender == target)
             return error(I18n.CMD_GENERIC_HOME_FAILURE, sender, home);
         else

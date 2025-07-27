@@ -2,9 +2,13 @@ package com.simonorj.mc.getmehome.command;
 
 import com.simonorj.mc.getmehome.GetMeHome;
 import com.simonorj.mc.getmehome.I18n;
+import com.simonorj.mc.getmehome.TempUtils;
 import com.simonorj.mc.getmehome.config.YamlPermValue;
 import com.simonorj.mc.getmehome.storage.HomeStorageAPI;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -102,37 +106,34 @@ public class ListHomesCommand implements TabExecutor {
 
         Iterator<Map.Entry<String, Location>> i = homes.entrySet().iterator();
         AtomicInteger exempt = new AtomicInteger(0);
-        StringBuilder list;
+        TextComponent.Builder list = Component.text();
 
         if (i.hasNext()) {
-
-            ChatColor f = plugin.getFocusColor();
-            ChatColor c = plugin.getContentColor();
-            list = new StringBuilder(homeName(i.next(), wv, exempt, defaultHome));
-
+            TextColor f = plugin.getFocusColor();
+            TextColor c = plugin.getContentColor();
+            list.append(homeName(i.next(), wv, exempt, defaultHome));
             while (i.hasNext()) {
-                list.append(c).append(", ").append(f).append(homeName(i.next(), wv, exempt, defaultHome));
+                list.append(Component.text(", ").color(c)).append(homeName(i.next(), wv, exempt, defaultHome).color(f));
             }
         } else {
-            list = new StringBuilder(ChatColor.ITALIC.toString()).append(raw(I18n.CMD_LISTHOMES_NONE, sender));
+            list.append(TempUtils.legacyString2Component(raw(I18n.CMD_LISTHOMES_NONE, sender)).decorate(TextDecoration.ITALIC));
         }
 
         Object total = wv == null ? null : wv.worlds != null && global ? "?" : wv.value;
         Object count = exempt.get() == 0 ? homes.size() : (homes.size() - exempt.get()) + "(+" + exempt.get() + ")";
 
         if (target == sender)
-            sender.sendMessage(prefixed(I18n.CMD_LISTHOMES_SELF, sender, count, total, list.toString()));
+            sender.sendMessage(prefixed(I18n.CMD_LISTHOMES_SELF, sender, count, total).append(list));
         else if (target instanceof Player)
-            sender.sendMessage(prefixed(I18n.CMD_LISTHOMES_OTHER, sender, target.getName(), count, total, list.toString()));
+            sender.sendMessage(prefixed(I18n.CMD_LISTHOMES_OTHER, sender, target.getName(), count, total).append(list));
         else
-            sender.sendMessage(prefixed(I18n.CMD_LISTHOMES_OTHER_OFFLINE, sender, target.getName(), count, list.toString()));
+            sender.sendMessage(prefixed(I18n.CMD_LISTHOMES_OTHER_OFFLINE, sender, target.getName(), count).append(list));
     }
 
-    private String homeName(Map.Entry<String, Location> d, YamlPermValue.WorldValue wv, AtomicInteger exempt, String defaultHome) {
+    private TextComponent homeName(Map.Entry<String, Location> d, YamlPermValue.WorldValue wv, AtomicInteger exempt, String defaultHome) {
         boolean deductable = false;
         if (wv != null && wv.deducts != null) {
             String world = d.getValue().getWorld().getName().toLowerCase();
-
             for (YamlPermValue.WorldValue wvd : wv.deducts) {
                 if (wvd.worlds.contains(world)) {
                     deductable = true;
@@ -145,11 +146,11 @@ public class ListHomesCommand implements TabExecutor {
                 }
             }
         }
-
-        StringBuilder ret = new StringBuilder();
-        if (d.getKey().equals(defaultHome)) ret.append(ChatColor.BOLD);
-        if (deductable) ret.append(ChatColor.ITALIC);
-        ret.append(d.getKey()).append(ChatColor.RESET);
-        return ret.toString();
+        List<TextDecoration> decorates = new ArrayList<>();
+        if (d.getKey().equals(defaultHome)) decorates.add(TextDecoration.BOLD);
+        if (deductable) decorates.add(TextDecoration.ITALIC);
+        TextComponent.Builder home = Component.text();
+        home.append(Component.text(d.getKey()).decorate(decorates.toArray(TextDecoration[]::new)));
+        return home.build();
     }
 }

@@ -8,7 +8,8 @@ import com.simonorj.mc.getmehome.config.ConfigUpgrader;
 import com.simonorj.mc.getmehome.config.YamlPermValue;
 import com.simonorj.mc.getmehome.storage.HomeStorageAPI;
 import com.simonorj.mc.getmehome.storage.StorageYAML;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -27,9 +28,9 @@ public final class GetMeHome extends JavaPlugin {
     private YamlPermValue warmup;
     private YamlPermValue cooldown;
 
-    private String prefix;
-    private ChatColor focusColor;
-    private ChatColor contentColor;
+    private TextComponent prefix;
+    private TextColor focusColor;
+    private TextColor contentColor;
     private int welcomeHomeRadiusSquared;
     private File i18nFolder;
 
@@ -53,15 +54,15 @@ public final class GetMeHome extends JavaPlugin {
         return cooldown;
     }
 
-    public ChatColor getFocusColor() {
+    public TextColor getFocusColor() {
         return focusColor;
     }
 
-    public ChatColor getContentColor() {
+    public TextColor getContentColor() {
         return contentColor;
     }
 
-    String getPrefix() {
+    TextComponent getPrefix() {
         return prefix;
     }
 
@@ -177,9 +178,9 @@ public final class GetMeHome extends JavaPlugin {
 
         int whr = getConfig().getInt(ConfigTool.WELCOME_HOME_RADIUS_NODE, 4);
         this.welcomeHomeRadiusSquared = whr * whr;
-        this.prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString(ConfigTool.MESSAGE_PREFIX_NODE, "&6[GetMeHome]"));
-        this.contentColor = ChatColor.getByChar(getConfig().getString(ConfigTool.MESSAGE_CONTENT_COLOR_NODE, "e"));
-        this.focusColor = ChatColor.getByChar(getConfig().getString(ConfigTool.MESSAGE_FOCUS_COLOR_NODE, "f"));
+        this.prefix = TempUtils.legacyString2Component(getConfig().getString(ConfigTool.MESSAGE_PREFIX_NODE, "&6[GetMeHome]"));
+        this.contentColor = TempUtils.legacyChar2TextColor(getConfig().getString(ConfigTool.MESSAGE_CONTENT_COLOR_NODE, "e").charAt(0));
+        this.focusColor = TempUtils.legacyChar2TextColor(getConfig().getString(ConfigTool.MESSAGE_FOCUS_COLOR_NODE, "f").charAt(0));
         MessageTool.reloadI18n(i18nFolder);
     }
 

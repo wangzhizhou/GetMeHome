@@ -114,17 +114,17 @@ public class StorageYAML implements HomeStorageAPI {
 
     @Override
     public boolean setHome(UUID uuid, String name, Location loc) {
+        OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
+        if (p.getName() == null) {
+            return false;
+        }
         updateFlag = true;
-
         String uid = uuid.toString();
         // Increment when adding another home
         ConfigurationSection cs = storage.getConfigurationSection(uid);
         if (cs == null) {
             cs = storage.createSection(uid);
         }
-
-        OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
-
         // Update name
         storage.set("names." + p.getName().toLowerCase(), uuid.toString());
         if (saveName)

@@ -1,6 +1,8 @@
 package com.simonorj.mc.getmehome;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,29 +53,30 @@ public class MessageTool {
         return base(i18n, getLocale(p), args);
     }
 
-    public static String prefixed(I18n i18n, CommandSender p, Object... args) {
-        String pre = GetMeHome.getInstance().getPrefix();
-        if (!pre.isEmpty()) pre += ' ';
+    public static TextComponent prefixed(I18n i18n, CommandSender p, Object... args) {
+        TextComponent pre = GetMeHome.getInstance().getPrefix();
+        if (TempUtils.isNotEmptyComponent(pre)) pre = pre.append(Component.space());
 
-        ChatColor focus = GetMeHome.getInstance().getFocusColor();
-        ChatColor content = GetMeHome.getInstance().getContentColor();
+        TextColor focus = GetMeHome.getInstance().getFocusColor();
+        TextColor content = GetMeHome.getInstance().getContentColor();
 
         for (int i = args.length - 1; i >= 0; i--) {
             args[i] = focus + args[i].toString() + content;
         }
 
-        return pre + content + base(i18n, getLocale(p), args);
+        String legacyBaseString = base(i18n, getLocale(p), args);
+
+        return pre.append(TempUtils.legacyString2Component(legacyBaseString));
     }
 
-    public static String error(I18n i18n, CommandSender p, Object... args) {
-        String pre = GetMeHome.getInstance().getPrefix();
-        if (!pre.isEmpty()) pre += ' ';
-
+    public static TextComponent error(I18n i18n, CommandSender p, Object... args) {
+        TextComponent pre = GetMeHome.getInstance().getPrefix();
+        if (TempUtils.isNotEmptyComponent(pre)) pre = pre.append(Component.space());
         for (int i = args.length - 1; i >= 0; i--) {
             args[i] = args[i].toString();
         }
-
-        return pre + ChatColor.RED + base(i18n, getLocale(p), args);
+        String legacyBaseString = base(i18n, getLocale(p), args);
+        return pre.append(TempUtils.legacyString2Component(legacyBaseString));
     }
 
     private static Locale getLocale(CommandSender sender) {

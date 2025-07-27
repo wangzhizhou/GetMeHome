@@ -52,28 +52,26 @@ public class PermValue {
         if (value == null) {
             throw new InvalidConfigurationException("'value' for '" + perm + "' perm is not defined in configuration");
         }
-
         Operation oper = Operation.fromString((String) m.get(OPERATION_LIST_NODE));
-        List<String> worlds = parseWorlds((List) m.get(WORLDS_LIST_NODE));
-
+        @SuppressWarnings("unchecked")
+        List<String> worlds = parseWorlds((List<String>) m.get(WORLDS_LIST_NODE));
         return new PermValue(perm, value, oper, worlds);
     }
 
-    private static List<String> parseWorlds(List wList) {
+    private static List<String> parseWorlds(List<String> wList) {
         if (wList != null) {
             if (wList.isEmpty())
                 return null;
-
             ImmutableList.Builder<String> worldsBuilder = ImmutableList.builder();
-            for (Object o : wList)
-                worldsBuilder.add(((String) o).toLowerCase());
+            for (String o : wList)
+                worldsBuilder.add(o.toLowerCase());
 
             return worldsBuilder.build();
         }
         return null;
     }
 
-    enum Operation {
+    public enum Operation {
         SET, WORLD, ADD, SUB;
 
         private static Operation fromString(String input) {
