@@ -6,7 +6,7 @@ on:
       - dev
 jobs:
   publish:
-    if: github.repository_owner == 'OrzGeeker'
+    if: github.repository_owner == 'wangzhizhou'
     runs-on: ubuntu-latest
     steps:
       - name: checkout
