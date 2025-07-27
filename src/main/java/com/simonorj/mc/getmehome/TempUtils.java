@@ -6,56 +6,52 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
 
 public final class TempUtils {
-    public static TextColor convertChatColor(ChatColor chatColor) {
-        return switch (chatColor) {
-            case BLACK -> NamedTextColor.BLACK;
-            case DARK_BLUE -> NamedTextColor.DARK_BLUE;
-            case DARK_GREEN -> NamedTextColor.DARK_GREEN;
-            case DARK_AQUA -> NamedTextColor.DARK_AQUA;
-            case DARK_RED -> NamedTextColor.DARK_RED;
-            case DARK_PURPLE -> NamedTextColor.DARK_PURPLE;
-            case GOLD -> NamedTextColor.GOLD;
-            case GRAY -> NamedTextColor.GRAY;
-            case DARK_GRAY -> NamedTextColor.DARK_GRAY;
-            case BLUE -> NamedTextColor.BLUE;
-            case GREEN -> NamedTextColor.GREEN;
-            case AQUA -> NamedTextColor.AQUA;
-            case RED -> NamedTextColor.RED;
-            case LIGHT_PURPLE -> NamedTextColor.LIGHT_PURPLE;
-            case YELLOW -> NamedTextColor.YELLOW;
-            case WHITE -> NamedTextColor.WHITE;
+    public static TextColor legacyChar2TextColor(char legacyChar) {
+        return switch (legacyChar) {
+            case '0' -> NamedTextColor.BLACK;
+            case '1' -> NamedTextColor.DARK_BLUE;
+            case '2' -> NamedTextColor.DARK_GREEN;
+            case '3' -> NamedTextColor.DARK_AQUA;
+            case '4' -> NamedTextColor.DARK_RED;
+            case '5' -> NamedTextColor.DARK_PURPLE;
+            case '6' -> NamedTextColor.GOLD;
+            case '7' -> NamedTextColor.GRAY;
+            case '8' -> NamedTextColor.DARK_GRAY;
+            case '9' -> NamedTextColor.BLUE;
+            case 'a' -> NamedTextColor.GREEN;
+            case 'b' -> NamedTextColor.AQUA;
+            case 'c' -> NamedTextColor.RED;
+            case 'd' -> NamedTextColor.LIGHT_PURPLE;
+            case 'e' -> NamedTextColor.YELLOW;
+            case 'f' -> NamedTextColor.WHITE;
             default -> NamedTextColor.WHITE; // 默认回退
         };
     }
 
-    public static String compoent2LegacyString(Component component) {
-        return LegacyComponentSerializer.legacySection().serialize(component);
-    }
-
     public static TextComponent legacyString2Component(String legacyString) {
-        return LegacyComponentSerializer.legacySection().deserialize(legacyString);
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(legacyString);
     }
 
-    public static boolean isEmpty(Component component) {
+    public static boolean isNotEmptyComponent(Component component) {
         if (component == null) {
-            return true;
+            return false;
         }
 
         if (component instanceof TextComponent text) {
             if (!text.content().isEmpty()) {
-                return false;
+                return true;
             }
         }
 
         // 检查子组件
         if (!component.children().isEmpty()) {
-            return false;
+            return true;
         }
 
         // 检查是否有样式（如果有样式，即使无内容也不完全算"空"）
-        return component.style().equals(Style.empty());
+        return !component.style().equals(Style.empty());
     }
+
 }

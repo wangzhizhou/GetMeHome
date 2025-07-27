@@ -20,39 +20,38 @@ public class ConfigTool {
     public static final String CONFIG_VERSION_NODE = "config-version";
     public static final int version = 3;
 
-    private static final String HEADER =
-            "# GetMeHome by Simon Chuu\n" +
-            "\n" +
-            "# For help, follow the plugin project link below:\n" +
-            "# https://github.com/SimonOrJ/GetMeHome/\n";
+    private static final String HEADER = """
+            # GetMeHome by Simon Chuu
+            
+            # For help, follow the plugin project link below:
+            # https://github.com/SimonOrJ/GetMeHome/
+            """;
 
-    private static final String STORAGE =
-            "# Storage Settings\n";
+    private static final String STORAGE = "# Storage Settings\n";
 
-    private static final String STORAGE_SAVENAME =
-            "  # should the plugin save player names with their UUID?\n" +
-            "  # This is only for your reference when looking through the file.\n";
+    private static final String STORAGE_SAVENAME = """
+              # should the plugin save player names with their UUID?
+              # This is only for your reference when looking through the file.
+            """;
 
-    private static final String MESSAGE =
-            "";
+    private static final String MESSAGE = "";
 
-    private static final String MESSAGE_PREFIX =
-            "  # Prefix for beginning of message. Use & and 0~9, a~f to set colors.\n";
+    private static final String MESSAGE_PREFIX = "  # Prefix for beginning of message. Use & and 0~9, a~f to set colors.\n";
 
-    private static final String MESSAGE_CONTENT_COLOR =
-            "  # Colors: Accepted values are 0~9, a~f, or named colors.\n" +
-            "  # https://minecraft.gamepedia.com/Formatting_codes\n";
+    private static final String MESSAGE_CONTENT_COLOR = """
+              # Colors: Accepted values are 0~9, a~f, or named colors.
+              # https://minecraft.gamepedia.com/Formatting_codes
+            """;
 
-    private static final String MESSAGE_FOCUS_COLOR =
-            "  # Color for the focus points. e.g. home names or player names\n";
+    private static final String MESSAGE_FOCUS_COLOR = "  # Color for the focus points. e.g. home names or player names\n";
 
-    private static final String WELCOME_HOME_RADIUS =
-            "# Maximum distance away from home point for \"Welcome home\" message to not show\n" +
-            "# on /home\n" +
-            "#   Set to -1 to disable \"Welcome home\" message\n";
+    private static final String WELCOME_HOME_RADIUS = """
+            # Maximum distance away from home point for "Welcome home" message to not show
+            # on /home
+            #   Set to -1 to disable "Welcome home" message
+            """;
 
-    private static final String CONFIG_VERSION =
-            "# Keeps track of configuration version -- do not change!\n";
+    private static final String CONFIG_VERSION = "# Keeps track of configuration version -- do not change!\n";
 
     static String saveToString(FileConfiguration config) {
         boolean storageSavename = config.getBoolean(STORAGE_SAVENAME_NODE, true);
@@ -61,27 +60,6 @@ public class ConfigTool {
         String messageFocusColor = config.getString(MESSAGE_FOCUS_COLOR_NODE, "f");
         int welcomeHomeRadius = config.getInt(WELCOME_HOME_RADIUS_NODE, 4);
 
-        return HEADER +
-                '\n' +
-                STORAGE +
-                STORAGE_ROOT + ":\n" +
-                STORAGE_SAVENAME +
-                "  " + SAVENAME_CHILD + ": " + storageSavename + '\n' +
-                '\n' +
-                MESSAGE +
-                MESSAGE_ROOT + ":\n" +
-                MESSAGE_PREFIX +
-                "  " + PREFIX_CHILD + ": \"" + messagePrefix + "\"\n" +
-                MESSAGE_CONTENT_COLOR +
-                "  " + CONTENT_COLOR_CHILD + ": " + messageContentColor + '\n' +
-                MESSAGE_FOCUS_COLOR +
-                "  " + FOCUS_COLOR_CHILD + ": " + messageFocusColor + '\n' +
-                '\n' +
-                WELCOME_HOME_RADIUS +
-                WELCOME_HOME_RADIUS_NODE + ": " + welcomeHomeRadius + '\n' +
-                '\n' +
-                CONFIG_VERSION +
-                CONFIG_VERSION_NODE + ": " + version +
-                '\n';
+        return HEADER + '\n' + STORAGE + STORAGE_ROOT + ":\n" + STORAGE_SAVENAME + "  " + SAVENAME_CHILD + ": " + storageSavename + '\n' + '\n' + MESSAGE + MESSAGE_ROOT + ":\n" + MESSAGE_PREFIX + "  " + PREFIX_CHILD + ": \"" + messagePrefix + "\"\n" + MESSAGE_CONTENT_COLOR + "  " + CONTENT_COLOR_CHILD + ": " + messageContentColor + '\n' + MESSAGE_FOCUS_COLOR + "  " + FOCUS_COLOR_CHILD + ": " + messageFocusColor + '\n' + '\n' + WELCOME_HOME_RADIUS + WELCOME_HOME_RADIUS_NODE + ": " + welcomeHomeRadius + '\n' + '\n' + CONFIG_VERSION + CONFIG_VERSION_NODE + ": " + version + '\n';
     }
 }
