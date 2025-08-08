@@ -55,6 +55,9 @@ tasks {
     withType<Javadoc> {
         options.encoding = "UTF-8"
     }
+    jar {
+        archiveClassifier.set(archiveClassifierSuffix)
+    }
     // 配置工程内直接调试服务端插件
     // gradle-plugin: https://github.com/jpenilla/run-task#basic-usage
     runServer {
@@ -94,6 +97,11 @@ val suffixedVersion: String = if (isRelease) {
     "${versionString}.${githubRunNumber}"
 } else {
     "${versionString}_${timestampString}"
+}
+val archiveClassifierSuffix: String = if (githubRunNumber != null) {
+    githubRunNumber
+} else {
+    ""
 }
 
 // Use the commit description for the changelog
